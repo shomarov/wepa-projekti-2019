@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head(title='Search people')">
+        <meta charset="UTF-8" />
+        <title>Title</title>
+</head>
+
+<body>
+
+        <nav th:replace="fragments/layout :: navigation(activeTab='search')" />
+
+        <main>
+
+                <section class="jumbotron">
+                        <div class="container">
+                                <div class="row">
+                                        <div class="col-md-auto">
+                                                <div th:if="${profilePhoto != null}">
+                                                        <img th:src="@{/users/{username}/photos/{id}(username=${currentuser.username}, id=${profilePhoto})}"
+                                                                alt="Profile photo" class="mr-3" style="width:200px;">
+                                                </div>
+                                        </div>
+                                        <div class="col">
+                                                <h1 th:text="${currentuser.name}" class="jumbotron-heading mt-5">Name
+                                                </h1>
+                                        </div>
+                                </div>
+                        </div>
+                        </div>
+                </section>
+
+                <nav class="navbar">
+                        <div class="container">
+                                <a class="navbar mx-auto" style="color:Lime;">Search People</a>
+                        </div>
+                </nav>
+
+                <div class="container">
+                        <form th:action="@{/users/{username}/search}" method="GET" class="form-inline">
+                                <div class="input-group mt-4 w-75 mx-auto">
+                                        <input class="form-control form-control" type="text" name="name"
+                                                placeholder="Search by name...">
+                                                <button type="submit" class="btn btn-sm btn-primary mt-1 mb-1 ml-4">Search</button>
+                                </div>
+                        </form>
+
+                </div>
+
+
+
+
+                <div th:each="user : ${users}" class="card mx-auto mt-4" style="max-width: 480px;">
+                        <div class="card-body">
+                                <div class="row">
+                                        <div class="col-4">
+                                                <a th:href="@{/users/{username}(username=${user.username})}">
+                                                        <img th:src="@{/images/proxy.duckduckgo.com.jpg}"
+                                                                class="card-img" alt="test image" /></a>
+                                        </div>
+                                        <div class="col-8 mt-1">
+
+                                                <h5 class="card-title mt-3"><a
+                                                                th:href="@{/users/{username}(username=${user.username})}"
+                                                                th:text="${user.name}">Firstname Lastname</a>
+                                                </h5>
+                                                <form th:action="@{/users/{username}/add_friend(username=${user.username})}"
+                                                        method="POST">
+                                                        <button type="submit" class="btn btn-primary btn-sm mt-3">Add
+                                                                friend</button></form>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+
+
+
+                </div>
+                </div>
+
+                </div>
+        </main>
+
+
+</body>
+
+</html>

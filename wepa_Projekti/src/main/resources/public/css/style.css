@@ -1,0 +1,43 @@
+html {
+  overflow-y: scroll;
+}
+
+body {
+  background-color: #edf0f5;
+}
+
+a {
+  color: #365899;
+}
+
+.btn-primary {
+  background-color: #365899;
+  border: none;
+}
+
+.navbar {
+  background-color: #3b5999;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-size: 14px;
+}
+
+#registerButton {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.fakeimg {
+  height: 200px;
+  background: #aaa;
+}
+
+.jumbotron,
+.card {
+  background-color: #edf0f5 !important;
+}
+
+.img-thumbnail {
+  height: 150px;
+  width: 150px;
+}
