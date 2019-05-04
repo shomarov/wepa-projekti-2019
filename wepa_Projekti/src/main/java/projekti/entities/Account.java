@@ -30,9 +30,10 @@ public class Account extends AbstractPersistable<Long> {
 
 //    @NotEmpty
 //    @Size(min = 3, max = 30)
-    private String link;
+    private String profileLink;
 
-    private String about;
+    @OneToOne
+    private Photo profilePhoto;
 
     @ManyToMany
     private List<Account> friends;
@@ -45,8 +46,5 @@ public class Account extends AbstractPersistable<Long> {
 
     @OneToMany
     private List<Message> messages;
-    
-    @OneToOne(mappedBy = "user")
-    private PhotoAlbum photoAlbum;
 
 }

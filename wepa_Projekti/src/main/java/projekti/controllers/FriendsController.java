@@ -37,8 +37,8 @@ public class FriendsController {
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto().getId());
+        if (accountService.loadByUsername(currentUser).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByUsername(currentUser).getProfilePhoto().getId());
         }
 
         if (name != null) {
@@ -58,8 +58,8 @@ public class FriendsController {
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto().getId());
+        if (accountService.loadByUsername(currentUser).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByUsername(currentUser).getProfilePhoto().getId());
         }
 
         model.addAttribute("requestsReceived", friendRequestService.loadRequestsTo(currentUser));
@@ -72,8 +72,8 @@ public class FriendsController {
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto().getId());
+        if (accountService.loadByUsername(currentUser).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByUsername(currentUser).getProfilePhoto().getId());
         }
 
         model.addAttribute("requestsSent", friendRequestService.loadRequestsFrom(currentUser));
@@ -87,8 +87,8 @@ public class FriendsController {
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
         model.addAttribute("user", accountService.loadByUsername(username));
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(currentUser)).getProfilePhoto().getId());
+        if (accountService.loadByUsername(currentUser).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByUsername(currentUser).getProfilePhoto().getId());
         }
 
         if (name != null) {

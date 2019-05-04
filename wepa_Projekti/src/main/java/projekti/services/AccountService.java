@@ -32,7 +32,7 @@ public class AccountService {
         a.setUsername(username);
         a.setPassword(passwordEncoder.encode(password));
         a.setName(name);
-        a.setLink(link);
+        a.setProfileLink(link);
         accountRepository.save(a);
 
         PhotoAlbum album = new PhotoAlbum();

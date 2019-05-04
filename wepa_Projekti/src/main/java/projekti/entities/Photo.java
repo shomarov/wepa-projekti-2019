@@ -1,24 +1,26 @@
 package projekti.entities;
 
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PhotoAlbum extends AbstractPersistable<Long> {
-    
-    @OneToOne
-    private Account user;
+public class Photo extends FileObject {
     
     @OneToMany
-    private List<FileObject> photos;
+    private List<PhotoComment> comments;
+
+    @ManyToMany
+    private Set<Account> likes;
+
+    private String description;
 
 }

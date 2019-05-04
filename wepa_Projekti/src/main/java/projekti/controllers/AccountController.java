@@ -22,9 +22,6 @@ public class AccountController {
     @Autowired
     private MessageService messageService;
 
-    @Autowired
-    private PhotoAlbumRepository photoAlbumRepository;
-
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password,
             @RequestParam String name, @RequestParam String link) {
@@ -39,13 +36,18 @@ public class AccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
-        model.addAttribute("user", accountService.loadByUsername(username));
         model.addAttribute("messages", messageService.loadUserMessages(username));
         model.addAttribute("comments", messageService.loadUserMessages(username));
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)).getProfilePhoto().getId());
+        if (accountService.loadByUsername(username).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByUsername(username).getProfilePhoto().getId());
         }
+
+        if (username.equals(currentUser)) {
+            return "myprofile";
+        }
+
+        model.addAttribute("user", accountService.loadByUsername(username));
 
         return "profile";
     }

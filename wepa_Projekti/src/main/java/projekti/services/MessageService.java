@@ -54,7 +54,7 @@ public class MessageService {
         String currentUser = auth.getName();
 
         MessageComment comment = new MessageComment();
-        comment.setUser(accountService.loadByUsername(currentUser));
+        comment.setSender(accountService.loadByUsername(currentUser));
         comment.setDateTime(LocalDateTime.now());
         comment.setContent(content);
 

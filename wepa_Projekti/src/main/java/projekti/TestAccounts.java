@@ -29,7 +29,7 @@ public class TestAccounts {
         a.setName("Tony Stark");
         a.setUsername("ironman");
         a.setPassword(passwordEncoder.encode("password"));
-        a.setLink("Ironman");
+        a.setProfileLink("Ironman");
         accountRepository.save(a);
 
         PhotoAlbum album = new PhotoAlbum();
@@ -40,7 +40,7 @@ public class TestAccounts {
         b.setName("Steve Rogers");
         b.setUsername("captain");
         b.setPassword(passwordEncoder.encode("password"));
-        b.setLink("Captain America");
+        b.setProfileLink("Captain America");
         accountRepository.save(b);
 
         album = new PhotoAlbum();
@@ -51,7 +51,7 @@ public class TestAccounts {
         c.setName("Bruce Banner");
         c.setUsername("hulk");
         c.setPassword(passwordEncoder.encode("password"));
-        c.setLink("Hulk");
+        c.setProfileLink("Hulk");
         accountRepository.save(c);
 
         album = new PhotoAlbum();
@@ -62,7 +62,7 @@ public class TestAccounts {
         d.setName("Thor Odinson");
         d.setUsername("thor");
         d.setPassword(passwordEncoder.encode("password"));
-        d.setLink("Thor");
+        d.setProfileLink("Thor");
         accountRepository.save(d);
 
         album = new PhotoAlbum();
@@ -73,7 +73,7 @@ public class TestAccounts {
         e.setName("Natasha Romanoff");
         e.setUsername("blackwidow");
         e.setPassword(passwordEncoder.encode("password"));
-        e.setLink("Black Widow");
+        e.setProfileLink("Black Widow");
         accountRepository.save(e);
 
         album = new PhotoAlbum();
@@ -84,7 +84,7 @@ public class TestAccounts {
         f.setName("Peter Parker");
         f.setUsername("spiderman");
         f.setPassword(passwordEncoder.encode("password"));
-        f.setLink("spiderman");
+        f.setProfileLink("spiderman");
         accountRepository.save(f);
 
         album = new PhotoAlbum();
