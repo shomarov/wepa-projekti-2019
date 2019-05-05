@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head(title='Search people')">
+        <meta charset="UTF-8" />
+        <title>Title</title>
+</head>
+
+<body>
+
+        <nav th:replace="fragments/layout :: navigation(activeTab='null')" />
+
+        <main>
+
+                <section class="jumbotron">
+                        <div class="container">
+                                <div class="row">
+                                        <div class="col-md-auto">
+                                                <div th:if="${profilePhoto != null}">
+                                                        <img th:src="@{/users/{profileLink}/photos/{id}(profileLink=${user.profileLink}, id=${profilePhoto})}"
+                                                                alt="Profile photo" class="mr-3" style="width:200px;">
+                                                </div>
+                                        </div>
+                                        <div class="col">
+                                                <h1 th:text="${user.name}" class="jumbotron-heading mt-5">Name</h1>
+                                        </div>
+                                </div>
+                        </div>
+                        </div>
+                </section>
+
+
+
+
+                <nav class="navbar">
+                        <div class="container">
+                                <a class="navbar mx-auto" th:href="@{/users/{profileLink}(profileLink=${user.profileLink})}"
+                                        style="color:Lime;">Messages</a>
+                                <a class="navbar text-white mx-auto"
+                                        th:href="@{/users/{profileLink}/photos(profileLink=${user.profileLink})}">Photos</a>
+                        </div>
+                </nav>
+
+                <div class="container mt-3">
+
+                        <form th:action="@{/users/{profileLink}/post_message(profileLink=${user.profileLink})}" method="POST">
+                                <div class="form-group">
+                                        <textarea class="form-control w-50" name="content" rows="2"></textarea>
+                                        <button type="submit" class="btn btn-sm btn-primary mt-3">Post message</button>
+                                </div>
+                        </form>
+                </div>
+
+                <div class="container mt-3">
+                                <div th:each="message : ${messages}" class="media border p-3 mt-3">
+                                    <div th:if="${message.sender.profilePhoto != null}">
+                                        <a th:href="@{/users/{profileLink}(profileLink=${message.sender.profileLink})}">
+                                            <img th:src="@{/users/{profileLink}/photos/{id}(profileLink=${message.sender.profileLink}, id=${message.sender.profilePhoto.id})}"
+                                                alt="Profile photo" class="mr-3" style="width:200px;"></a></div>
+                                    <div class="media-body mt-1">
+                                        <h5>
+                                            <span th:text="${message.sender.name}">John Doe</span>
+                                            <small><i><span th:text="${#temporals.format(message.dateTime, 'dd MMM yyyy HH:MM:ss')}">Posted on ...</i></small></span></h5>
+                                            
+                                                            <span th:text="${message.content}">Lorem ipsum...</span><br>
+                                                            <form class="mt-2"
+                                            th:action="@{/users/{profileLink}/messages/{id}/like_message(profileLink=${user.profileLink}, id=${message.id})}"
+                                            method="POST">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary mt-2"><span th:text="${#lists.size(message.likes)}"></span> Likes</button>
+                                          </form>
+                                                            <p class="mt-3">
+                                                            <form th:action="@{/users/{profileLink}/messages/{messageid}/post_comment(profileLink=${user.profileLink},messageid=${message.id})}" method="POST">
+                                                                    <div class="form-inline">
+                                                            <textarea class="form-control w-50 mt-2" name="content" rows="1"></textarea>
+                                                                    <button type="submit" class="btn btn-outline-primary btn-sm mt-2 ml-2">Comment</button></div>
+                                                            </form></p>
+                                                            <div th:each="comment : ${message.comments}" class="media p-3">
+                                                                    <div class="col-md-auto">
+                                                                            <a th:href="@{/users/{profileLink}(profileLink=${message.sender.profileLink})}">
+                                                                                    <div th:if="${comment.sender.profilePhoto != null}">
+                                                                                                    <img th:src="@{/users/{profileLink}/photos/{id}(profileLink=${comment.sender.profileLink}, id=${comment.sender.profilePhoto.id})}"
+                                                                                                            alt="Profile photo" class="mr-3" style="width:200px;"></div></div></a>
+                                                                                                            <div class="col-md-auto">
+                                                                                            <div class="media-body mt-1">
+                                                                                                            <h5>
+                                                                                                                            <span th:text="${comment.sender.name}">John Doe</span> <small><i><span
+                                                                                                                                                    th:text="${#temporals.format(comment.dateTime, 'dd MMM yyyy HH:MM:ss')}">Posted on ...</i></small></span></h5>
+                                                                                                                    <span th:text="${comment.content}">Lorem ipsum...</span></div>
+                                                                                                          </div>
+                                                            </div>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                    </div>
+
+        </main>
+
+
+</body>
+
+</html>
