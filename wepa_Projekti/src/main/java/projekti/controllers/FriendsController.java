@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import projekti.services.AccountService;
 import projekti.services.FriendRequestService;
 import projekti.repositories.FriendRequestRepository;
@@ -31,10 +30,11 @@ public class FriendsController {
     @Autowired
     private PhotoAlbumRepository photoAlbumRepository;
 
-    @GetMapping("/users/{username}/friends")
-    public String friends(Model model, @PathVariable String username, @RequestParam(required = false) String name) {
+    @GetMapping("/users/{profileLink}/friends")
+    public String friends(Model model, @PathVariable String profileLink, @RequestParam(required = false) String name) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
+        
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
 
         if (accountService.loadByUsername(currentUser).getProfilePhoto() != null) {
@@ -52,8 +52,8 @@ public class FriendsController {
         return "friends";
     }
 
-    @GetMapping("/users/{username}/friends/requestsReceived")
-    public String requestsReceived(Model model, @PathVariable String username, @RequestParam(required = false) String name) {
+    @GetMapping("/users/{profileLink}/friends/requestsReceived")
+    public String requestsReceived(Model model, @PathVariable String profileLink, @RequestParam(required = false) String name) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
@@ -66,8 +66,8 @@ public class FriendsController {
         return "requestsreceived";
     }
 
-    @GetMapping("/users/{username}/friends/requestsSent")
-    public String requestsSent(Model model, @PathVariable String username, @RequestParam(required = false) String name) {
+    @GetMapping("/users/{profileLink}/friends/requestsSent")
+    public String requestsSent(Model model, @PathVariable String profileLink, @RequestParam(required = false) String name) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
@@ -80,12 +80,11 @@ public class FriendsController {
         return "requestssent";
     }
 
-    @GetMapping("/users/{username}/search")
-    public String getAllUsers(Model model, @PathVariable String username, @RequestParam(required = false) String name) {
+    @GetMapping("/users/{profileLink}/search")
+    public String getAllUsers(Model model, @PathVariable String profileLink, @RequestParam(required = false) String name) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
-        model.addAttribute("user", accountService.loadByUsername(username));
 
         if (accountService.loadByUsername(currentUser).getProfilePhoto() != null) {
             model.addAttribute("profilePhoto", accountService.loadByUsername(currentUser).getProfilePhoto().getId());
@@ -142,12 +141,12 @@ public class FriendsController {
         return "redirect:/users/" + userFrom + "/friends";
     }
 
-    @PostMapping("/users/{username}/delete_friend")
-    public String deleteFriend(@PathVariable String username) {
+    @PostMapping("/users/{profileLink}/delete_friend")
+    public String deleteFriend(@PathVariable String profileLink) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
 
-        friendRequestService.deleteFriend(currentUser, username);
+        friendRequestService.deleteFriend(currentUser, profileLink);
 
         return "redirect:/users/" + currentUser + "/friends";
     }

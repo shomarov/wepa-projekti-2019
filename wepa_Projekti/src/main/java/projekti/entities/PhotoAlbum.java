@@ -19,6 +19,6 @@ public class PhotoAlbum extends AbstractPersistable<Long> {
     private Account user;
     
     @OneToMany
-    private List<FileObject> photos;
+    private List<Photo> photos;
 
 }

@@ -31,23 +31,23 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("/users/{username}")
-    public String getProfile(Model model, @PathVariable String username) {
+    @GetMapping("/users/{profileLink}")
+    public String getProfile(Model model, @PathVariable String profileLink) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
-        model.addAttribute("messages", messageService.loadUserMessages(username));
-        model.addAttribute("comments", messageService.loadUserMessages(username));
+        model.addAttribute("messages", messageService.loadUserMessages(profileLink));
+        model.addAttribute("comments", messageService.loadUserMessages(profileLink));
 
-        if (accountService.loadByUsername(username).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", accountService.loadByUsername(username).getProfilePhoto().getId());
+        if (accountService.loadByProfileLink(profileLink).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByProfileLink(profileLink).getProfilePhoto().getId());
         }
 
-        if (username.equals(currentUser)) {
+        if (accountService.loadByProfileLink(profileLink).getUsername().equals(currentUser)) {
             return "myprofile";
         }
 
-        model.addAttribute("user", accountService.loadByUsername(username));
+        model.addAttribute("user", accountService.loadByProfileLink(profileLink));
 
         return "profile";
     }

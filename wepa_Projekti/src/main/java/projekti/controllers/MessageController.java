@@ -33,22 +33,22 @@ public class MessageController {
         return "redirect:/users/" + userTo;
     }
 
-    @PostMapping("/users/{username}/messages/{messageid}/post_comment")
-    public String postComment(@PathVariable String username, @PathVariable Long messageid, @RequestParam String content) {
+    @PostMapping("/users/{profileLink}/messages/{messageid}/post_comment")
+    public String postComment(@PathVariable String profileLink, @PathVariable Long messageid, @RequestParam String content) {
         messageService.addCommentToMessage(messageid, content);
 
-        return "redirect:/users/" + username;
+        return "redirect:/users/" + profileLink;
     }
     
     @Transactional
-    @PostMapping("/users/{username}/messages/{id}/like_message")
-    public String likeMessage(@PathVariable String username, @PathVariable Long id) {
+    @PostMapping("/users/{profileLink}/messages/{id}/like_message")
+    public String likeMessage(@PathVariable String profileLink, @PathVariable Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentuser = auth.getName();
         
         messageRepository.getOne(id).getLikes().add(accountService.loadByUsername(currentuser));
         
-        return "redirect:/users/" + username;
+        return "redirect:/users/" + profileLink;
     }
 
 }

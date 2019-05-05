@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-auto">
                         <div th:if="${profilePhoto != null}">
-                            <img th:src="@{/users/{username}/photos/{id}(username=${currentuser.username}, id=${profilePhoto})}"
+                            <img th:src="@{/users/{profileLink}/photos/{id}(profileLink=${currentuser.profileLink}, id=${profilePhoto})}"
                                 alt="Profile photo" class="mr-3" style="width:200px;">
                         </div>
                     </div>
@@ -33,18 +33,18 @@
         <nav class="navbar">
             <div class="container">
                 <a class="navbar text-white mx-auto"
-                    th:href="@{/users/{username}/friends(username=${currentuser.username})}">My Friends</a>
+                    th:href="@{/users/{profileLink}/friends(profileLink=${currentuser.profileLink})}">My Friends</a>
                 <a class="navbar text-white mx-auto"
-                    th:href="@{/users/{username}/friends/requestsReceived(username=${currentuser.username})}">Requests
+                    th:href="@{/users/{profileLink}/friends/requestsReceived(profileLink=${currentuser.profileLink})}">Requests
                     Received</a>
                 <a class="navbar mx-auto" style="color:Lime;"
-                    th:href="@{/users/{username}/friends/requestsSent(username=${currentuser.username})}">Requests
+                    th:href="@{/users/{profileLink}/friends/requestsSent(profileLink=${currentuser.profileLink})}">Requests
                     Sent</a>
             </div>
         </nav>
 
         <div class="container">
-            <form th:action="@{/users/{username}/friends}" method="GET" class="form-inline">
+            <form th:action="@{/users/{profileLink}/friends}" method="GET" class="form-inline">
                 <div class="input-group mt-4 w-75 mx-auto">
                     <input class="form-control form-control" type="text" name="name" placeholder="Search by name...">
                     <button type="submit" class="btn btn-sm btn-primary mt-1 mb-1 ml-4">Search</button>
@@ -59,21 +59,21 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
-                            <a th:href="@{/users/{username}(username=${request.userTo.username})}">
+                            <a th:href="@{/users/{profileLink}(profileLink=${request.userTo.profileLink})}">
                                 <img th:src="@{/images/proxy.duckduckgo.com.jpg}" class="card-img"
                                     alt="test image" /></a>
                         </div>
                         <div class="col-8 mt-2">
-                               <h6 th:text="${#temporals.format(request.dateTime, 'dd MMM yyyy HH:MM:SS')}">date</h6>
-                            <h4 class="card-title mt-3"><a
-                                    th:href="@{/users/{username}(username=${request.userTo.username})}"
+                               <h6 th:text="${#temporals.format(request.dateTime, 'dd MMM yyyy HH:MM:ss')}">date</h6>
+                            <h5 class="card-title mt-3"><a
+                                    th:href="@{/users/{profileLink}(profileLink=${request.userTo.profileLink})}"
                                     th:text="${request.userTo.name}">Firstname
                                     Lastname</a>
                             </h5>
                             <div class="row">
                                 <div class="col">
                                     <form
-                                        th:action="@{/users/{username}/cancel_request(username=${request.userTo.username})}"
+                                        th:action="@{/users/{profileLink}/cancel_request(profileLink=${request.userTo.profileLink})}"
                                         method="POST">
                                         <button type="submit" class="btn btn-danger btn-sm mt-1">Cancel
                                             request</button>

@@ -17,7 +17,7 @@
                                 <div class="row">
                                         <div class="col-md-auto">
                                                 <div th:if="${profilePhoto != null}">
-                                                        <img th:src="@{/users/{username}/photos/{id}(username=${currentuser.username}, id=${profilePhoto})}"
+                                                        <img th:src="@{/users/{profileLink}/photos/{id}(profileLink=${currentuser.profileLink}, id=${profilePhoto})}"
                                                                 alt="Profile photo" class="mr-3" style="width:200px;">
                                                 </div>
                                         </div>
@@ -33,13 +33,13 @@
                 <nav class="navbar">
                         <div class="container">
                                 <a class="navbar mx-auto"
-                                        th:href="@{/users/{username}/search(username=${currentuser.username})}"
+                                        th:href="@{/users/{profileLink}/search(profileLink=${currentuser.profileLink})}"
                                         style="color:Lime;">Search People</a>
                         </div>
                 </nav>
 
                 <div class="container">
-                        <form th:action="@{/users/{username}/search}" method="GET" class="form-inline">
+                        <form th:action="@{/users/{profileLink}/search}" method="GET" class="form-inline">
                                 <div class="input-group mt-4 w-75 mx-auto">
                                         <input class="form-control form-control" type="text" name="name"
                                                 placeholder="Search by name...">
@@ -57,17 +57,17 @@
                         <div class="card-body">
                                 <div class="row">
                                         <div class="col-4">
-                                                <a th:href="@{/users/{username}(username=${user.username})}">
+                                                <a th:href="@{/users/{profileLink}(profileLink=${user.profileLink})}">
                                                         <img th:src="@{/images/proxy.duckduckgo.com.jpg}"
                                                                 class="card-img" alt="test image" /></a>
                                         </div>
                                         <div class="col-8 mt-1">
 
                                                 <h5 class="card-title mt-3"><a
-                                                                th:href="@{/users/{username}(username=${user.username})}"
+                                                                th:href="@{/users/{profileLink}(profileLink=${user.profileLink})}"
                                                                 th:text="${user.name}">Firstname Lastname</a>
                                                 </h5>
-                                                <form th:action="@{/users/{username}/add_friend(username=${user.username})}"
+                                                <form th:action="@{/users/{profileLink}/add_friend(profileLink=${user.profileLink})}"
                                                         method="POST">
                                                         <button type="submit" class="btn btn-primary btn-sm mt-3">Add
                                                                 friend</button></form>

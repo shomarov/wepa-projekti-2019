@@ -8,12 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import projekti.TestAccounts;
+import projekti.services.AccountService;
 
 @Controller
 public class DefaultController {
 
     @Autowired
     private TestAccounts avengers;
+    
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("*")
     public String redirect() {
@@ -25,7 +29,7 @@ public class DefaultController {
         if (isUserLoggedIn()) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = auth.getName();
-            return "redirect:/users/" + username;
+            return "redirect:/users/" + accountService.loadByUsername(username).getProfileLink();
         }
         return "landing";
     }

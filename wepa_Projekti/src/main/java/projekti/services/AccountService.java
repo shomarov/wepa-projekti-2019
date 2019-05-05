@@ -45,6 +45,10 @@ public class AccountService {
     public Account loadByUsername(String username) {
         return accountRepository.findByUsername(username);
     }
+    
+    public Account loadByProfileLink(String profileLink) {
+        return accountRepository.findByProfileLink(profileLink);
+    }
 
     public List<Account> loadAllAccounts() {
         return accountRepository.findAll();

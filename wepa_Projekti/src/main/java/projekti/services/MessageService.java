@@ -31,17 +31,17 @@ public class MessageService {
     public void postMessage(String userFrom, String userTo, String content) {
         Message message = new Message();
         message.setSender(accountService.loadByUsername(userFrom));
-        message.setReceiver(accountService.loadByUsername(userTo));
+        message.setReceiver(accountService.loadByProfileLink(userTo));
         message.setDateTime(LocalDateTime.now());
         message.setContent(content);
         messageRepository.save(message);
-        accountService.loadByUsername(userTo).getMessages().add(message);
+        accountService.loadByProfileLink(userTo).getMessages().add(message);
     }
 
-    public List<Message> loadUserMessages(String username) {
-        Pageable pageable = PageRequest.of(0, 25, Sort.by("dateTime").descending());
+    public List<Message> loadUserMessages(String profileLink) {
+        Pageable pageable = PageRequest.of(0, 25, Sort.by("dateTime").ascending());
 
-        return messageRepository.findByReceiver(accountService.loadByUsername(username), pageable);
+        return messageRepository.findByReceiver(accountService.loadByProfileLink(profileLink), pageable);
     }
 
     public Message loadMessage(Long id) {

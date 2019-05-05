@@ -37,48 +37,48 @@ public class PhotoAlbumController {
     @Autowired
     private PhotoCommentRepository photoCommentRepository;
 
-    @GetMapping("/users/{username}/photos")
-    public String photos(Model model, @PathVariable String username) {
+    @GetMapping("/users/{profileLink}/photos")
+    public String photos(Model model, @PathVariable String profileLink) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)) != null) {
-            model.addAttribute("albumPhotos", photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)).getPhotos());
+        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByProfileLink(profileLink)) != null) {
+            model.addAttribute("albumPhotos", photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByProfileLink(profileLink)).getPhotos());
         }
 
-        if (accountService.loadByUsername(username).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", accountService.loadByUsername(username).getProfilePhoto().getId());
+        if (accountService.loadByProfileLink(profileLink).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByProfileLink(profileLink).getProfilePhoto().getId());
         }
 
-        if (username.equals(currentUser)) {
+        if (accountService.loadByProfileLink(profileLink).getUsername().equals(currentUser)) {
             return "myphotos";
         }
         
-        model.addAttribute("user", accountService.loadByUsername(username));
+        model.addAttribute("user", accountService.loadByProfileLink(profileLink));
         return "photos";
     }
 
-    @GetMapping("/users/{username}/photos/{id}/view_photo")
-    public String viewPhoto(Model model, @PathVariable String username, @PathVariable Long id) {
+    @GetMapping("/users/{profileLink}/photos/{id}/view_photo")
+    public String viewPhoto(Model model, @PathVariable String profileLink, @PathVariable Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         model.addAttribute("currentuser", accountService.loadByUsername(currentUser));
-        model.addAttribute("user", accountService.loadByUsername(username));
+        model.addAttribute("user", accountService.loadByProfileLink(profileLink));
         model.addAttribute("comments", photoRepository.getOne(id).getComments());
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)) != null) {
+        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByProfileLink(profileLink)) != null) {
             model.addAttribute("photo", photoRepository.getOne(id));
         }
 
-        if (accountService.loadByUsername(username).getProfilePhoto() != null) {
-            model.addAttribute("profilePhoto", accountService.loadByUsername(username).getProfilePhoto().getId());
+        if (accountService.loadByProfileLink(profileLink).getProfilePhoto() != null) {
+            model.addAttribute("profilePhoto", accountService.loadByProfileLink(profileLink).getProfilePhoto().getId());
         }
 
         return "viewphoto";
     }
 
-    @GetMapping(path = "/users/{username}/photos/{id}", produces = "image/jpeg")
+    @GetMapping(path = "/users/{profileLink}/photos/{id}", produces = "image/jpeg")
     @ResponseBody
     public byte[] getPhoto(@PathVariable Long id) {
         if (photoRepository.existsById(id)) {
@@ -89,12 +89,12 @@ public class PhotoAlbumController {
     }
 
     @Transactional
-    @PostMapping("/users/{username}/photos/add_photo")
-    public String save(@PathVariable String username, @RequestParam("file") MultipartFile file, @RequestParam String description,
+    @PostMapping("/users/{profileLink}/photos/add_photo")
+    public String save(@PathVariable String profileLink, @RequestParam("file") MultipartFile file, @RequestParam String description,
             @RequestParam(defaultValue = "false") boolean isProfilePhoto) throws IOException {
         if (!file.getContentType().equals("image/jpeg")
-                || photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)).getPhotos().size() == 10) {
-            return "redirect:/users/" + username + "/photos";
+                || photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByProfileLink(profileLink)).getPhotos().size() == 10) {
+            return "redirect:/users/" + profileLink + "/photos";
         }
 
         Photo fo = new Photo();
@@ -102,39 +102,49 @@ public class PhotoAlbumController {
         fo.setDescription(description);
         photoRepository.save(fo);
 
-        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)) != null) {
-            PhotoAlbum album = photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username));
+        if (photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByProfileLink(profileLink)) != null) {
+            PhotoAlbum album = photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByProfileLink(profileLink));
             album.getPhotos().add(fo);
         } else {
             PhotoAlbum album = new PhotoAlbum();
-            album.setUser(accountService.loadByUsername(username));
+            album.setUser(accountService.loadByProfileLink(profileLink));
             photoAlbumRepository.save(album);
         }
 
         if (isProfilePhoto) {
-            accountService.loadByUsername(username).setProfilePhoto(fo);
+            accountService.loadByProfileLink(profileLink).setProfilePhoto(fo);
         }
 
-        return "redirect:/users/" + username + "/photos";
+        return "redirect:/users/" + profileLink + "/photos";
+    }
+    
+    @Transactional
+    @PostMapping("/users/{profileLink}/photos/{id}/set_profile_photo")
+    public String setProfilePhoto(@PathVariable String profileLink, @PathVariable Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = auth.getName();
+        
+        accountService.loadByUsername(currentUser).setProfilePhoto(photoRepository.getOne(id));
+        
+        return "redirect:/users/" + profileLink + "/photos";
     }
 
     @Transactional
-    @PostMapping("/users/{username}/photos/{id}/delete_photo")
-    public String deletePhoto(@PathVariable String username, @PathVariable Long id) {
-        if (accountService.loadByUsername(username).getProfilePhoto() != null
-                && accountService.loadByUsername(username).getProfilePhoto().getId() == id) {
-            accountService.loadByUsername(username).setProfilePhoto(null);
+    @PostMapping("/users/{profileLink}/photos/{id}/delete_photo")
+    public String deletePhoto(@PathVariable String profileLink, @PathVariable Long id) {
+        if (accountService.loadByProfileLink(profileLink).getProfilePhoto() != null
+                && accountService.loadByProfileLink(profileLink).getProfilePhoto().getId() == id) {
+            accountService.loadByProfileLink(profileLink).setProfilePhoto(null);
         }
-
-        photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByUsername(username)).getPhotos().remove(photoRepository.getOne(id));
+        photoAlbumRepository.findPhotoAlbumByUser(accountService.loadByProfileLink(profileLink)).getPhotos().remove(photoRepository.getOne(id));
         photoRepository.deleteById(id);
 
-        return "redirect:/users/" + username + "/photos";
+        return "redirect:/users/" + profileLink + "/photos";
     }
 
     @Transactional
-    @PostMapping("users/{username}/photos/{id}/post_comment")
-    public String commentPhoto(@PathVariable String username, @PathVariable Long id, @RequestParam String content) {
+    @PostMapping("users/{profileLink}/photos/{id}/post_comment")
+    public String commentPhoto(@PathVariable String profileLink, @PathVariable Long id, @RequestParam String content) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
 
@@ -147,18 +157,18 @@ public class PhotoAlbumController {
 
         photoRepository.getOne(id).getComments().add(photoComment);
 
-        return "redirect:/users/" + username + "/photos/" + id + "/view_photo";
+        return "redirect:/users/" + profileLink + "/photos/" + id + "/view_photo";
     }
     
     @Transactional
-    @PostMapping("/users/{username}/photos/{id}/like_photo")
-    public String likePhoto(@PathVariable String username, @PathVariable Long id) {
+    @PostMapping("/users/{profileLink}/photos/{id}/like_photo")
+    public String likePhoto(@PathVariable String profileLink, @PathVariable Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = auth.getName();
         
         photoRepository.getOne(id).getLikes().add(accountService.loadByUsername(currentUser));
 
-        return "redirect:/users/" + username + "/photos/";
+        return "redirect:/users/" + profileLink + "/photos/";
     }
 
 }

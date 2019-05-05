@@ -17,7 +17,7 @@
         <div class="row">
           <div class="col-md-auto">
             <div th:if="${profilePhoto != null}">
-              <img th:src="@{/users/{username}/photos/{id}(username=${user.username}, id=${profilePhoto})}"
+              <img th:src="@{/users/{profileLink}/photos/{id}(profileLink=${user.profileLink}, id=${profilePhoto})}"
                 alt="Profile photo" class="mr-3" style="width:200px;">
             </div>
           </div>
@@ -31,8 +31,8 @@
 
     <nav class="navbar">
       <div class="container">
-        <a class="navbar text-white mx-auto" th:href="@{/users/{username}(username=${user.username})}">Messages</a>
-        <a class="navbar mx-auto" th:href="@{/users/{username}/photos(username=${user.username})}"
+        <a class="navbar text-white mx-auto" th:href="@{/users/{profileLink}(profileLink=${user.profileLink})}">Message Wall</a>
+        <a class="navbar mx-auto" th:href="@{/users/{profileLink}/photos(profileLink=${user.profileLink})}"
           style="color:Lime;">Photos</a>
       </div>
     </nav>
@@ -44,16 +44,16 @@
         <div th:each="photo : ${albumPhotos}" class="col-md-6">
           <div class="card mb-4 box-shadow w-50 mx-auto">
             <img class="card-img-top"
-              th:src="@{/users/{username}/photos/{id}(username=${user.username}, id=${photo.id})}" alt="Card image cap">
+              th:src="@{/users/{profileLink}/photos/{id}(profileLink=${user.profileLink}, id=${photo.id})}" alt="Card image cap">
             <div class="card-body">
                 <p class="card-text" th:text="${photo.description}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
               <div class="d-flex justify-content-between align-items-center">
-                <form th:action="@{/users/{username}/photos/{id}/view_photo(username=${user.username}, id=${photo.id})}"
+                <form th:action="@{/users/{profileLink}/photos/{id}/view_photo(profileLink=${user.profileLink}, id=${photo.id})}"
                   method="GET">
                   <button type="submit" class="btn btn-sm btn-outline-success">View</button>
                 </form>
                 <form
-                  th:action="@{/users/{username}/photos/{id}/like_photo(username=${user.username}, id=${photo.id})}"
+                  th:action="@{/users/{profileLink}/photos/{id}/like_photo(profileLink=${user.profileLink}, id=${photo.id})}"
                   method="POST">
                   <button type="submit" class="btn btn-sm btn-outline-primary"><span th:text="${#lists.size(photo.likes)}"></span> Likes</button>
                 </form>

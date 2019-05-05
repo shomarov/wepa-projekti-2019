@@ -38,19 +38,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul sec:authorize="isAuthenticated()" class="navbar-nav mr-auto">
                     <li th:classappend="${activeTab == 'profile'}? 'active' : null" class="nav-item">
-                        <a th:href="@{/users/{username}(username=${currentuser.username})}" class="nav-link"><i
+                        <a th:href="@{/users/{profileLink}(profileLink=${currentuser.profileLink})}" class="nav-link"><i
                                 class="fas fa-home"></i> My Profile </a>
                     </li>
                     <li th:classappend="${activeTab == 'photos'}? 'active' : null" class="nav-item">
-                        <a th:href="@{/users/{username}/photos(username=${currentuser.username})}" class="nav-link"><i
+                        <a th:href="@{/users/{profileLink}/photos(profileLink=${currentuser.profileLink})}" class="nav-link"><i
                                 class="fas fa-images"></i> My Photos </a>
                     </li>
                     <li th:classappend="${activeTab == 'friends'}? 'active' : null" class="nav-item">
-                        <a th:href="@{/users/{username}/friends(username=${currentuser.username})}" class="nav-link"><i
+                        <a th:href="@{/users/{profileLink}/friends(profileLink=${currentuser.profileLink})}" class="nav-link"><i
                                 class="fas fa-user-friends"></i> My Friends </a>
                     </li>
                     <li th:classappend="${activeTab == 'search'}? 'active' : null" class="nav-item">
-                        <a th:href="@{/users/{username}/search(username=${currentuser.username})}" class="nav-link"><i
+                        <a th:href="@{/users/{profileLink}/search(profileLink=${currentuser.profileLink})}" class="nav-link"><i
                                 class="fas fa-search"></i> Search People</a>
                     </li>
                 </ul>

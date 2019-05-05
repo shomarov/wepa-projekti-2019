@@ -84,7 +84,7 @@ public class TestAccounts {
         f.setName("Peter Parker");
         f.setUsername("spiderman");
         f.setPassword(passwordEncoder.encode("password"));
-        f.setProfileLink("spiderman");
+        f.setProfileLink("Spiderman");
         accountRepository.save(f);
 
         album = new PhotoAlbum();

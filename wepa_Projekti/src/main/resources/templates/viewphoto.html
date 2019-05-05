@@ -17,7 +17,7 @@
         <div class="row">
           <div class="col-md-auto">
             <div th:if="${profilePhoto != null}">
-              <img th:src="@{/users/{username}/photos/{id}(username=${user.username}, id=${profilePhoto})}"
+              <img th:src="@{/users/{profileLink}/photos/{id}(profileLink=${user.profileLink}, id=${profilePhoto})}"
                 alt="Profile photo" class="mr-3" style="width:200px;">
             </div>
           </div>
@@ -31,7 +31,7 @@
 
     <nav class="navbar">
       <div class="container">
-        <a class="navbar mx-auto" th:href="@{/users/{username}/photos(username=${user.username})}"
+        <a class="navbar mx-auto" th:href="@{/users/{profileLink}/photos(profileLink=${user.profileLink})}"
           style="color:Lime;">Photos</a>
       </div>
     </nav>
@@ -43,12 +43,14 @@
         <div class="col">
           <div class="card mb-4 box-shadow mx-auto">
             <img class="card-img-top"
-              th:src="@{/users/{username}/photos/{id}(username=${user.username}, id=${photo.id})}" alt="Card image cap">
+              th:src="@{/users/{profileLink}/photos/{id}(profileLink=${user.profileLink}, id=${photo.id})}"
+              alt="Card image cap">
           </div>
         </div>
       </div>
 
-      <form th:action="@{/users/{username}/photos/{id}/post_comment(username=${user.username}, id=${photo.id})}"
+      <form
+        th:action="@{/users/{profileLink}/photos/{id}/post_comment(profileLink=${user.profileLink}, id=${photo.id})}"
         method="POST">
         <div class="form-group">
           <textarea class="form-control w-50" name="content" rows="2"></textarea>
@@ -58,16 +60,16 @@
 
       <div th:each="comment : ${comments}" class="media p-3">
         <div class="col-md-auto">
-          <a th:href="@{/users/{username}(username=${comment.sender.username})}">
-            <div th:if="${comment.sender.photoAlbum.profilePhoto != null}">
+          <a th:href="@{/users/{profileLink}(profileLink=${comment.sender.profileLink})}">
+            <div th:if="${comment.sender.profilePhoto != null}">
               <img
-                th:src="@{/users/{username}/photos/{id}(username=${comment.sender.username}, id=${comment.sender.photoAlbum.profilePhoto.id})}"
+                th:src="@{/users/{profileLink}/photos/{id}(profileLink=${comment.sender.profileLink}, id=${comment.sender.profilePhoto.id})}"
                 alt="Profile photo" class="mr-3" style="width:200px;"></div>
         </div>
         <div class="col-md-auto">
           <div class="media-body mt-1">
             <h5>
-              <span th:text="${comment.sender.name}">John Doe</span> <small><i><span th:text="${#temporals.format({comment.dateTime})}">Posted on ...</i></small></span><button type="submit" class="btn btn-outline-primary btn-sm ml-2"><i class="far fa-thumbs-up"></i> Like</button></h5>
+              <span th:text="${comment.sender.name}">John Doe</span> <small><i><span th:text="${#temporals.format(comment.dateTime, 'dd MMM yyyy HH:MM:ss')}">Posted on ...</i></small></span></h5>
                                                           <span th:text="${comment.content}">Lorem ipsum...</span></div>
                                                 </div>
   </div>

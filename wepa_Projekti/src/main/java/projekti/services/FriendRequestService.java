@@ -2,7 +2,6 @@ package projekti.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class FriendRequestService {
     public void sendRequest(String userFrom, String userTo) {
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setUserFrom(accountService.loadByUsername(userFrom));
-        friendRequest.setUserTo(accountService.loadByUsername(userTo));
+        friendRequest.setUserTo(accountService.loadByProfileLink(userTo));
         friendRequest.setDateTime(LocalDateTime.now());
         friendRequestRepository.save(friendRequest);
     }
@@ -37,21 +36,21 @@ public class FriendRequestService {
 
     @Transactional
     public void confirmRequest(String userFrom, String userTo) {
-        accountService.loadByUsername(userFrom).getFriends().add(accountService.loadByUsername(userTo));
-        accountService.loadByUsername(userTo).getFriends().add(accountService.loadByUsername(userFrom));
+        accountService.loadByProfileLink(userFrom).getFriends().add(accountService.loadByUsername(userTo));
+        accountService.loadByUsername(userTo).getFriends().add(accountService.loadByProfileLink(userFrom));
         deleteRequest(userFrom, userTo);
     }
 
     @Transactional
     public void deleteRequest(String userFrom, String userTo) {
-        Long requestId = friendRequestRepository.findByUserFromAndUserTo(accountService.loadByUsername(userFrom), accountService.loadByUsername(userTo)).getId();
+        Long requestId = friendRequestRepository.findByUserFromAndUserTo(accountService.loadByUsername(userFrom), accountService.loadByProfileLink(userTo)).getId();
         friendRequestRepository.deleteById(requestId);
     }
 
     @Transactional
     public void deleteFriend(String user1, String user2) {
-        accountService.loadByUsername(user1).getFriends().remove(accountService.loadByUsername(user2));
-        accountService.loadByUsername(user2).getFriends().remove(accountService.loadByUsername(user1));
+        accountService.loadByUsername(user1).getFriends().remove(accountService.loadByProfileLink(user2));
+        accountService.loadByProfileLink(user2).getFriends().remove(accountService.loadByUsername(user1));
     }
 
 }
