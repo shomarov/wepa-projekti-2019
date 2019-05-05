@@ -10,6 +10,9 @@ import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
@@ -20,19 +23,17 @@ public class Message extends AbstractPersistable<Long> {
 
     @ManyToOne
     private Account sender;
-    
+
     @ManyToOne
     private Account receiver;
-    
+
     @OneToMany
     private List<MessageComment> comments;
-    
+
     @ManyToMany
     private Set<Account> likes;
-    
+
     private LocalDateTime dateTime;
     private String content;
-
-    
 
 }

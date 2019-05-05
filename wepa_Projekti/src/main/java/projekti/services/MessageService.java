@@ -59,10 +59,13 @@ public class MessageService {
         comment.setContent(content);
 
         commentRepository.save(comment);
-        
+
+        if (messageRepository.getOne(messageId).getComments().size() == 10) {
+            messageRepository.getOne(messageId).getComments().remove(0);
+        }
         messageRepository.getOne(messageId).getComments().add(comment);
     }
-    
+
     public List<MessageComment> loadUserMessageComments(Long messageId) {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("dateTime").descending());
 
